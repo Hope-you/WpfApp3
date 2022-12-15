@@ -1,5 +1,6 @@
 ﻿using ModuleA;
 using ModuleB;
+using ModuleC.Views;
 using Prism.DryIoc;
 using Prism.Ioc;
 using Prism.Modularity;
@@ -30,6 +31,8 @@ namespace WpfApp3
             containerRegistry.RegisterForNavigation<View1>();
             containerRegistry.RegisterForNavigation<View2>();
             containerRegistry.RegisterForNavigation<View3>();
+
+            containerRegistry.RegisterDialog<ViewDialog>();
         }
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
         {

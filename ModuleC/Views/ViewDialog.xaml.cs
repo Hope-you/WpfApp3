@@ -1,4 +1,6 @@
-﻿
+﻿using DryIoc;
+using ModuleC.Events;
+using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,16 +16,23 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ModuleB.Views
+namespace ModuleC.Views
 {
     /// <summary>
-    /// ViewB.xaml 的交互逻辑
+    /// ViewDialog.xaml 的交互逻辑
     /// </summary>
-    public partial class ViewB : UserControl
+    public partial class ViewDialog : UserControl
     {
-        public ViewB()
+        public ViewDialog(IEventAggregator eventAggregator)
         {
             InitializeComponent();
+            eventAggregator.GetEvent<MessageEvent>().Subscribe(showMsg);
+            eventAggregator.GetEvent<MessageEvent>().Unsubscribe(showMsg);
+        }
+
+        public   void showMsg(string msg)
+        {
+            MessageBox.Show(msg);
         }
     }
 }

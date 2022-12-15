@@ -29,6 +29,15 @@
                     Margin="5"
                     Command="{Binding BackCommand}"
                     CommandParameter="View3" />
+
+            <Button Content="模块4Dialog"
+                    Margin="5"
+                    Command="{Binding DialogCommand}"
+                    CommandParameter="ViewDialog" />
+            <TextBlock Text="{Binding DialogCallBack}"
+                       FontSize="14"
+                       Margin="5"
+                       VerticalAlignment="Center" />
         </StackPanel>
         <!--按钮控制的区域 用来显示用户界面-->
         <ContentControl Grid.Row="1"

@@ -12,11 +12,6 @@ namespace ModuleA.ViewModels
 {
     public class ViewAViewModel : BindableBase, INavigationAware,IConfirmNavigationRequest
     {
-
-        public ViewAViewModel()
-        {
-
-        }
         private string title;
 
         public string Title

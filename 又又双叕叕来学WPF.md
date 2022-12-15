@@ -92,10 +92,30 @@
   - 在App.xaml.cs中重写`CreateModuleCatalog`方法
   - ` return new DirectoryModuleCatalog() { ModulePath = @".\Modules" }; ` Prism会自动加载里面的所有动态库,虽然这种方式基本解耦了,但是对于开发不利,不能加断点.
 
-### 导航
+### 导航 navigation
 
 > - **约定** 一个视图(View)Prism在实例化它的时候，会自动寻找这个ViewModels这个命名控件下，和View对应的ViewViewModel，这个是Prism里面固定的
 > - **配置**  也可以手动绑定，在这个Profile（继承了IModule）的类的`RegisterTypes`方法中指定对应关系，`containerRegistry.RegisterForNavigation<ViewA, ViewAViewModel>();` (这个优先级高一点，配置大于约定)
 
 - 导航参数
-  - 
+  - 导航试图的ViewModel类需要继承`INavigationAware`
+  - 父容器构造函数注入`IRegionManager regionManager`这个实例，调用这个方法`regionManager.Regions["ContentRegion"].RequestNavigate(试图名obj，callback回调，给导航的参数keys)`可以把这个方法封装一下，给Command，然后前端绑定command就可以交互了。
+  - Prism还有一个路由的功能，`IRegionNavigationJournal navigationJournal`,可以通过上一条的回调获取到这个接口实例` callback.Context.NavigationService.Journal;`这个实例记录了上一个导航，也可以拦截当前导航。
+
+### 对话 Dialog
+
+> 窗体的弹框，就是`ShowDialog()`,只不过Prism封装了一些方法,可以更优雅的使用,和导航差不多,先注入依赖,父容器中通过构造函数注入`IDialogService dialogService`实例,`dialogService.ShowDialog(obj, keys, callback=>{})` obj就是会话的View,keys是会话的参数,callback可以获取到弹窗的YesOrNo和`callback.Parameters.GetValue<string>("value");`会话传过来的参数.
+
+
+
+###  发布订阅  IEventAggregator
+
+> 在ViewModel需要用到的实例中注入`IEventAggregator` 就可以实现订阅、发布、取消订阅这些操作
+
+- 需要先定义一个类`public class MessageEvent:PubSubEvent<string>{ }`消息类型不一定是string也可以是复杂的对象
+- `eventAggregator.GetEvent<MessageEvent>().Publish("消息"); `ViewModel中注入实例之后,可以这样发布消息
+- `eventAggregator.GetEvent<MessageEvent>().Subscribe(arg=>{})`在对应的View中可以这样获取到消息
+- `eventAggregator.GetEvent<MessageEvent>().Unsubscribe(showMsg);`showMsg[是一个方法组]()
+
+
+
